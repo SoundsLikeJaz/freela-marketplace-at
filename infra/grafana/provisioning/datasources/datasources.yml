@@ -1,0 +1,24 @@
+apiVersion: 1
+
+datasources:
+  # Loki: fonte dos logs centralizados. Permite pesquisar por
+  # correlationId, contratoId, eventId e traceId entre todos os serviços.
+  - name: Loki
+    type: loki
+    access: proxy
+    url: http://loki:3100
+    isDefault: true
+    jsonData:
+      # Liga um traceId encontrado num log ao trace correspondente no Zipkin.
+      derivedFields:
+        - name: traceId
+          matcherRegex: "traceId=(\\w+)"
+          url: "http://localhost:9411/zipkin/traces/$${__value.raw}"
+          datasourceUid: zipkin
+
+  # Zipkin: tracing distribuído.
+  - name: Zipkin
+    type: zipkin
+    uid: zipkin
+    access: proxy
+    url: http://zipkin:9411

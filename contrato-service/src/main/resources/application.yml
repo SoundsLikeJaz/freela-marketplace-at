@@ -1,0 +1,64 @@
+server:
+  port: 8081
+spring:
+  application:
+    name: contrato-service
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/contrato_db}
+    username: ${DB_USER:freela}
+    password: ${DB_PASSWORD:freela}
+    hikari:
+      maximum-pool-size: 5
+  jpa:
+    hibernate:
+      ddl-auto: update
+    open-in-view: false
+    properties:
+      hibernate:
+        format_sql: true
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
+    template:
+      observation-enabled: true
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+      acks: all
+      properties:
+        enable.idempotence: true
+        max.in.flight.requests.per.connection: 1
+
+contrato:
+  outbox:
+    relay-intervalo-ms: 2000
+    topicos:
+      ContratoCriado: contratos.contrato-criado
+      EntregaRegistrada: contratos.entrega-registrada
+      ContratoConcluido: contratos.contrato-concluido
+      ContratoCancelado: contratos.contrato-cancelado
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+  endpoint:
+    health:
+      show-details: always
+  tracing:
+    sampling:
+      probability: 1.0
+  zipkin:
+    tracing:
+      endpoint: ${ZIPKIN_ENDPOINT:http://localhost:9411/api/v2/spans}
+eureka:
+  client:
+    service-url:
+      defaultZone: ${EUREKA_URL:http://localhost:8761/eureka/}
+logging:
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level service=${spring.application.name} traceId=%X{traceId:-} spanId=%X{spanId:-} correlationId=%X{correlationId:-} contratoId=%X{contratoId:-} eventId=%X{eventId:-} thread=%thread logger=%logger{36} - %msg%n"
+  level:
+    root: INFO
+    br.com.freela: INFO
+    org.hibernate.SQL: INFO

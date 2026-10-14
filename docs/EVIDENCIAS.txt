@@ -1,0 +1,72 @@
+==========================================
+ EVIDENCIAS DE EXECUCAO - Freela Marketplace
+ Coletado em: Tue Sep 22 23:29:03 -03 2026
+==========================================
+
+### OUTBOX (contrato_db) ###
+       tipo        |  status   | tentativas |             contrato_id              | correlation_id  
+-------------------+-----------+------------+--------------------------------------+-----------------
+ ContratoCriado    | PUBLICADO |          1 | ee744d5e-be71-4e16-9030-0dae78d875a6 | smoke-teste-001
+ ContratoCriado    | PUBLICADO |          1 | 64ba368f-196e-4682-aeb7-59723976a579 | smoke-teste-002
+ EntregaRegistrada | PUBLICADO |          1 | 64ba368f-196e-4682-aeb7-59723976a579 | smoke-teste-002
+ ContratoConcluido | PUBLICADO |          1 | 64ba368f-196e-4682-aeb7-59723976a579 | smoke-teste-002
+ ContratoCriado    | PUBLICADO |          1 | 790595fc-fd3a-4c3a-b8d8-5b4f1676dadb | smoke-final-003
+ EntregaRegistrada | PUBLICADO |          1 | 790595fc-fd3a-4c3a-b8d8-5b4f1676dadb | smoke-final-003
+ ContratoConcluido | PUBLICADO |          1 | 790595fc-fd3a-4c3a-b8d8-5b4f1676dadb | smoke-final-003
+ ContratoCriado    | PUBLICADO |          1 | 2221b358-7a5b-45d7-9f2e-23e789d920ca | smoke-trace-004
+ EntregaRegistrada | PUBLICADO |          1 | 2221b358-7a5b-45d7-9f2e-23e789d920ca | smoke-trace-004
+ ContratoConcluido | PUBLICADO |          1 | 2221b358-7a5b-45d7-9f2e-23e789d920ca | smoke-trace-004
+(10 rows)
+
+
+### AUDITORIA (auditoria_db) ###
+    event_type     |             aggregate_id             | correlation_id  
+-------------------+--------------------------------------+-----------------
+ ContratoCriado    | ee744d5e-be71-4e16-9030-0dae78d875a6 | smoke-teste-001
+ ContratoCriado    | 64ba368f-196e-4682-aeb7-59723976a579 | smoke-teste-002
+ EntregaRegistrada | 64ba368f-196e-4682-aeb7-59723976a579 | smoke-teste-002
+ ContratoConcluido | 64ba368f-196e-4682-aeb7-59723976a579 | smoke-teste-002
+ ContratoCriado    | 790595fc-fd3a-4c3a-b8d8-5b4f1676dadb | smoke-final-003
+ EntregaRegistrada | 790595fc-fd3a-4c3a-b8d8-5b4f1676dadb | smoke-final-003
+ ContratoConcluido | 790595fc-fd3a-4c3a-b8d8-5b4f1676dadb | smoke-final-003
+ ContratoCriado    | 2221b358-7a5b-45d7-9f2e-23e789d920ca | smoke-trace-004
+ EntregaRegistrada | 2221b358-7a5b-45d7-9f2e-23e789d920ca | smoke-trace-004
+ ContratoConcluido | 2221b358-7a5b-45d7-9f2e-23e789d920ca | smoke-trace-004
+(10 rows)
+
+
+### REPUTACAO (reputacao_db) ###
+            freelancer_id             | contratos_concluidos | valor_total 
+--------------------------------------+----------------------+-------------
+ 22222222-2222-2222-2222-222222222222 |                    1 |     3500.00
+ bbbbbbbb-2222-2222-2222-222222222222 |                    2 |     6200.00
+(2 rows)
+
+
+### NOTIFICACOES (notificacao_db) ###
+       tipo        |             contrato_id              |           destinatario_id            
+-------------------+--------------------------------------+--------------------------------------
+ ContratoCriado    | ee744d5e-be71-4e16-9030-0dae78d875a6 | 22222222-2222-2222-2222-222222222222
+ ContratoCriado    | 64ba368f-196e-4682-aeb7-59723976a579 | 22222222-2222-2222-2222-222222222222
+ EntregaRegistrada | 64ba368f-196e-4682-aeb7-59723976a579 | 11111111-1111-1111-1111-111111111111
+ ContratoConcluido | 64ba368f-196e-4682-aeb7-59723976a579 | 22222222-2222-2222-2222-222222222222
+ ContratoCriado    | 790595fc-fd3a-4c3a-b8d8-5b4f1676dadb | bbbbbbbb-2222-2222-2222-222222222222
+ EntregaRegistrada | 790595fc-fd3a-4c3a-b8d8-5b4f1676dadb | aaaaaaaa-1111-1111-1111-111111111111
+ ContratoConcluido | 790595fc-fd3a-4c3a-b8d8-5b4f1676dadb | bbbbbbbb-2222-2222-2222-222222222222
+ ContratoCriado    | 2221b358-7a5b-45d7-9f2e-23e789d920ca | bbbbbbbb-2222-2222-2222-222222222222
+ EntregaRegistrada | 2221b358-7a5b-45d7-9f2e-23e789d920ca | aaaaaaaa-1111-1111-1111-111111111111
+ ContratoConcluido | 2221b358-7a5b-45d7-9f2e-23e789d920ca | bbbbbbbb-2222-2222-2222-222222222222
+(10 rows)
+
+
+### PROCESSED_EVENTS (idempotencia - reputacao_db) ###
+    event_type     |               event_id               
+-------------------+--------------------------------------
+ ContratoConcluido | 9d5004aa-83d3-4c31-9b75-6880992e93ed
+ ContratoConcluido | 9c6285a5-889b-46e3-9127-e832f82a3c40
+ ContratoConcluido | 8d1c8af3-8eba-4565-bb08-362bccc34812
+(3 rows)
+
+
+### ZIPKIN - servicos registrados ###
+["api-gateway","auditoria-service","contrato-service","notificacao-service","reputacao-service"]
